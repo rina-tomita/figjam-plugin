@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Emoji Highlighter</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 24px 16px;
+      background: #fff;
+      color: #222;
+      min-width: 260px;
+    }
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 44px);
+      gap: 16px 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .emoji-btn {
+      width: 44px;
+      height: 44px;
+      font-size: 2rem;
+      background: #f7f7f7;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+      position: relative;
+    }
+    .emoji-btn.selected {
+      background: #fffbe6;
+      border: 2px solid #ffe066;
+      box-shadow: 0 2px 8px #fff20033;
+    }
+    .reset-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px 0;
+      background: #f5f5f5;
+      border: none;
+      border-radius: 8px;
+      color: #888;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .reset-btn:hover {
+      background: #ffe066;
+      color: #222;
+    }
+    .title {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">Emoji Highlighter</div>
+  <div class="emoji-grid" id="emojiGrid">
+    <button class="emoji-btn" data-emoji="😆">😆</button>
+    <button class="emoji-btn" data-emoji="😊">😊</button>
+    <button class="emoji-btn" data-emoji="👍">👍</button>
+    <button class="emoji-btn" data-emoji="👀">👀</button>
+    <button class="emoji-btn" data-emoji="💡">💡</button>
+    <button class="emoji-btn" data-emoji="✅">✅</button>
+    <button class="emoji-btn" data-emoji="❗️">❗️</button>
+    <button class="emoji-btn" data-emoji="🔥">🔥</button>
+    <button class="emoji-btn" data-emoji="❤️">❤️</button>
+    <button class="emoji-btn" data-emoji="🤔">🤔</button>
+  </div>
+  <button class="reset-btn" id="resetBtn">Reset</button>
+
+  <script>
+    const emojiBtns = document.querySelectorAll('.emoji-btn');
+    let selected = null;
+
+    emojiBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 選択状態の切り替え
+        emojiBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selected = btn.dataset.emoji;
+        parent.postMessage({ pluginMessage: { type: 'select-emoji', emoji: selected } }, '*');
+      });
+    });
+
+    document.getElementById('resetBtn').onclick = () => {
+      emojiBtns.forEach(b => b.classList.remove('selected'));
+      selected = null;
+      parent.postMessage({ pluginMessage: { type: 'reset' } }, '*');
+    };
+  </script>
+</body>
+</html> 
